@@ -5,17 +5,21 @@ var patientTriageApp = new Vue({
   },
   methods: {
     handleSubmit() {
-      // TODO: Add the correct date via Javascript before posting
-
-       fetch(url, {
-         method:'post',
-         body: JSON.stringify(this.patient)
+       fetch('api/waiting/post.php', {
+         method:'POST',
+         body: JSON.stringify(this.patient),
          headers: {
            "Content-Type": "application/json; charset=utf-8"
          }
-        })
-       .then( ... )
-       waitingApp.patients.push(this.patient);
+       })
+       .then( response => response.json() )
+       .then( json => {waitingApp.patients = json})
+       .catch( err => {
+         console.error('TRIAGE POST ERROR:');
+         console.error(err);
+      });
+
+       // waitingApp.patients.push(this.patient);
        this.handleReset();
     },
     handleReset() {
